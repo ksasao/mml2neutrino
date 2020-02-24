@@ -57,7 +57,8 @@ namespace MML2NEUTRINO
             }
             if (mDuration > 0)
             {
-                for (int i = 0; i < 8 - mDuration; i++)
+                int last = 8 - mDuration;
+                for (int i = 0; i < last; i++)
                 {
                     measure.Add(CreateRest(new Rest { Length = 8, HasDot = false }));
                 }
