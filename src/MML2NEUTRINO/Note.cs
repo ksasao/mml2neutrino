@@ -9,9 +9,13 @@ namespace MML2NEUTRINO
     public class Note : IElement
     {
         /// <summary>
-        /// C, D, E, F, C+ (sharp), C# (sharp), D- (flat)
+        /// C, D, E, F, E, ...
         /// </summary>
         public string Step { get; set; }
+        /// <summary>
+        /// Sharp: 1, Flat: -1, Natural: 0
+        /// </summary>
+        public int Alter { get; set; }
         /// <summary>
         /// Octave
         /// </summary>
@@ -27,6 +31,6 @@ namespace MML2NEUTRINO
         /// <summary>
         /// Support Japanese Hiragana/Katakana letters
         /// </summary>
-        public string Lylic { get; set; }
+        public string Lyric { get; set; }
     }
 }
