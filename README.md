@@ -1,10 +1,14 @@
 # mml2neutrino
 MML (Music Macro Language) for NEUTRINO
 
+## アプリ
+- [v0.1](https://github.com/ksasao/mml2neutrino/files/4243814/v0.1.zip) とにかく試したい方向け。α版です。
+
 ## 書式
 - 「ドレミ」と音階の通りに歌わせる場合 ... "CドDレEミ"
 - オクターブを指定する場合 __O(数字)__
 - オクターブを1つ上げる __>__
+- オクターブを1つ下げる __<__
 - すべて八分音符で歌唱 ... "L8CドDレEミ"
 - 最後だけ四分音符で歌唱 ... "L8CドDレE4ミ"
 
