@@ -69,6 +69,9 @@ namespace MML2NEUTRINO
                         measure.SetAttributeValue("number", m++);
                         mDuration = 0;
                     }
+                }else if(t == typeof(Tempo))
+                {
+                    measure.Add(CreateTempo(((Tempo)e).Value));
                 }
             }
             if (mDuration > 0)
@@ -81,6 +84,18 @@ namespace MML2NEUTRINO
                 part.Add(measure);
             }
             return xml;
+        }
+        public XElement CreateTempo(int tempo)
+        {
+            XElement sound = new XElement("sound");
+            sound.SetAttributeValue("tempo", tempo);
+            XElement t = new XElement("direction",
+                new XElement("direction-type",
+                    new XElement("metronome",
+                        new XElement("beat-unit", "quater"),
+                        new XElement("per-minute", tempo))),
+                sound);
+            return t;
         }
         private XElement Attribute(int divisions, int fifths, int beats, int beatType, string sign, int line)
         {

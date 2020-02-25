@@ -12,11 +12,15 @@ namespace MML2NEUTRINO
     {
         static void Main(string[] args)
         {
+            string outputMusicXML = "output.musicxml";
+            string outputWav = "output.wav";
+
             if (args.Length > 0)
             {
                 string mml = args[0];
                 
                 MMLParser parser = new MMLParser();
+
                 IElement[] elements = null;
                 try
                 {
@@ -29,7 +33,7 @@ namespace MML2NEUTRINO
                 var xmlGen = new MusicXMLGenerator();
                 var xml = xmlGen.GenerateFromElements(elements);
 
-                string filename = Path.GetFullPath("output.musicxml");
+                string filename = Path.GetFullPath(outputMusicXML);
                 xml.Save(filename);
 
                 // Run NEUTRINO
@@ -49,7 +53,7 @@ namespace MML2NEUTRINO
 
                 // Play wave file
                 Console.WriteLine("Playing...");
-                System.Media.SoundPlayer player = new System.Media.SoundPlayer("output.wav");
+                System.Media.SoundPlayer player = new System.Media.SoundPlayer(outputWav);
                 player.PlaySync();
             }
         }
