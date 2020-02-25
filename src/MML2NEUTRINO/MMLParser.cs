@@ -64,20 +64,21 @@ namespace MML2NEUTRINO
             {
                 n++;
                 step = c;
-                if (mml[p + n].ToString() == "+" || mml[p + n].ToString() == "#")
+                string m = mml + "???";
+                if (m[p + n].ToString() == "+" || m[p + n].ToString() == "#")
                 {
                     alter = 1;
                     n++;
                 }
-                else if (mml[p + n].ToString() == "-")
+                else if (m[p + n].ToString() == "-")
                 {
                     alter = -1;
                     n++;
                 }
-                int j = ParseAsNumber(mml, p + n);
+                int j = ParseAsNumber(m, p + n);
                 if (j > 0)
                 {
-                    len = Convert.ToInt32(mml.Substring(p + n, j));
+                    len = Convert.ToInt32(m.Substring(p + n, j));
                     n += j;
                 }
                 bool hasDot = false;
@@ -94,7 +95,7 @@ namespace MML2NEUTRINO
                 }
                 if (lyric.Length == 0)
                 {
-                    throw new FormatException(mml.Substring(0,p+n) + " の後に歌詞がありません。");
+                    throw new FormatException(m.Substring(0,p+n) + " の後に歌詞がありません。");
                 }
                 list.Add(new Note {
                     Octave = octave,
@@ -146,7 +147,7 @@ namespace MML2NEUTRINO
                 {
                     int tempo = Convert.ToInt32(mml.Substring(p + n, j));
                     n += j;
-                    if (tempo < minTempo || octave > maxTempo)
+                    if (tempo < minTempo || tempo > maxTempo)
                     {
                         throw new FormatException(mml.Substring(0, p + n) + $" テンポの範囲は{minTempo}～{maxTempo}です。");
                     }
