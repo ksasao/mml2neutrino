@@ -2,6 +2,7 @@
 MML (Music Macro Language) for NEUTRINO
 
 ## アプリ
+- [v0.2](https://github.com/ksasao/mml2neutrino/files/4251015/mml2neutrino_v0.2.zip) 細かな修正と機能追加。文法エラーメッセージの改善。([リリースノート](https://github.com/ksasao/mml2neutrino/releases/tag/v0.2))
 - [v0.1](https://github.com/ksasao/mml2neutrino/files/4243814/v0.1.zip) とにかく試したい方向け。α版です。
 
 ## 書式
