@@ -8,11 +8,17 @@ namespace MML2NEUTRINO
 {
     public class MMLParser
     {
+        // params
+        const int minTempo = 40;
+        const int maxTempo = 300;
+        const int minOctave = 1;
+        const int maxOctave = 8;
+
         // for parse
         List<IElement> list = new List<IElement>();
         int length = 0;
         int octave = 0;
-        int tempo = 0;
+
         public MMLParser() { 
         }
         private void InitializeParameter()
@@ -20,7 +26,6 @@ namespace MML2NEUTRINO
             list.Clear();
             length = 4;
             octave = 4;
-            tempo = 80;
         }
         public IElement[] Parse(string mml)
         {
@@ -40,6 +45,11 @@ namespace MML2NEUTRINO
                 if (n > 0) { p += n; continue; }
                 n = ParseAsLength(mml, p);
                 if (n > 0) { p += n; continue; }
+                n = ParseAsTempo(mml, p);
+                if (n > 0) { p += n; continue; }
+
+                // parse error
+                throw new FormatException(mml.Substring(0, p) + " の後が解釈できませんでした。");
             }
             return list.ToArray();
         }
@@ -124,6 +134,27 @@ namespace MML2NEUTRINO
             }
             return n;
         }
+        private int ParseAsTempo(string mml, int p)
+        {
+            int n = 0;
+            string c = mml[p].ToString();
+            if (c == "T")
+            {
+                n++;
+                int j = ParseAsNumber(mml, p + n);
+                if (j > 0)
+                {
+                    int tempo = Convert.ToInt32(mml.Substring(p + n, j));
+                    n += j;
+                    if (tempo < minTempo || octave > maxTempo)
+                    {
+                        throw new FormatException(mml.Substring(0, p + n) + $" テンポの範囲は{minTempo}～{maxTempo}です。");
+                    }
+                    list.Add(new Tempo { Value = tempo });
+                }
+            }
+            return n;
+        }
         private int ParseAsOctave(string mml, int p)
         {
             int n = 0;
@@ -136,14 +167,36 @@ namespace MML2NEUTRINO
                 {
                     octave = Convert.ToInt32(mml.Substring(p + n, j));
                     n += j;
-                    if(octave < 1 || octave > 8)
-                    {
-                        throw new FormatException(mml.Substring(0, p + n) + " オクターブの範囲は1～8です。");
-                    }
+                    CheckOctave(mml, p + n);
                 }
             }
             return n;
         }
+        private int ParseAsOctaveShift(string mml, int p)
+        {
+            int n = 0;
+            string c = mml[p].ToString();
+            if (c == ">")
+            {
+                n++;
+                octave++;
+            }
+            else if (c == "<")
+            {
+                n++;
+                octave--;
+            }
+            CheckOctave(mml, p + n);
+            return n;
+        }
+        private void CheckOctave(string mml, int pn)
+        {
+            if (octave < minOctave || octave > maxOctave)
+            {
+                throw new FormatException(mml.Substring(0, pn) + $" オクターブの範囲は{minOctave}～{maxOctave}です。");
+            }
+        }
+
         private int ParseAsLength(string mml, int p)
         {
             int n = 0;
@@ -160,25 +213,7 @@ namespace MML2NEUTRINO
             }
             return n;
         }
-        private int ParseAsOctaveShift(string mml, int p)
-        {
-            int n = 0;
-            string c = mml[p].ToString();
-            if (c == ">")
-            {
-                n++;
-                octave++;
-            }else if (c == "<")
-            {
-                n++;
-                octave--;
-            }
-            if (octave < 1 || octave > 8)
-            {
-                throw new FormatException(mml.Substring(0, p + n) + " オクターブの範囲は1～8です。");
-            }
-            return n;
-        }
+
         private int ParseAsNumber(string mml, int p)
         {
             int n = 0;

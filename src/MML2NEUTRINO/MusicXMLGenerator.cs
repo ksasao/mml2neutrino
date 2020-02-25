@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,17 +15,32 @@ namespace MML2NEUTRINO
         int mDuration = 0;
         XElement xml = null;
         XElement part = null;
-        public MusicXMLGenerator(string template)
+
+        public MusicXMLGenerator()
         {
-            xml = XElement.Load(template);
+        }
+
+        private void Initialize()
+        {
+            // Read template from resource
+            System.Reflection.Assembly myAssembly = System.Reflection.Assembly.GetExecutingAssembly();
+            string[] resnames = myAssembly.GetManifestResourceNames();
+            using (StreamReader sr = new StreamReader(myAssembly.GetManifestResourceStream("MML2NEUTRINO.template.xml"), Encoding.UTF8))
+            {
+                xml = XElement.Load(sr);
+            }
             part = (
                     from e in xml.Elements("part")
                     select e).Last();
         }
+
         public XElement GenerateFromElements(IElement[] elements)
         {
-            int m = 2;
+            Initialize();
+
+            int m = 1;
             XElement measure = new XElement("measure");
+            measure.Add(Attribute(2, 0, 4, 4, "G", 2));
             measure.SetAttributeValue("number", m++);
 
             foreach (var e in elements)
@@ -65,6 +81,21 @@ namespace MML2NEUTRINO
                 part.Add(measure);
             }
             return xml;
+        }
+        private XElement Attribute(int divisions, int fifths, int beats, int beatType, string sign, int line)
+        {
+            XElement attribute = new XElement("attributes",
+                new XElement("divisions", 2),
+                new XElement("key",
+                    new XElement("fifths", fifths)),
+                new XElement("time",
+                    new XElement("beats", beats),
+                    new XElement("beat-type", beatType)),
+                new XElement("clef",
+                    new XElement("sign", sign),
+                    new XElement("line", line))
+                );
+            return attribute;
         }
 
         private XElement CreateNote(Note n)
