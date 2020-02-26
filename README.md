@@ -24,7 +24,7 @@ MML (Music Macro Language) for NEUTRINO
 |T|テンポを四分音符換算で指定|80|T120 (♩=120 に設定)|
 
 ## 使用方法
-1. ```input.bat``` ```mml2neutrino.exe``` ```template.xml``` の3つのファイルを NEUTRINO の Run.bat と同じフォルダにコピーしてください。
+1. ```input.bat``` ```mml2neutrino.exe``` のファイルを NEUTRINO の Run.bat と同じフォルダにコピーしてください。
 2. コマンドプロンプトで、NEUTRINOと同じフォルダに移動(```cd c:\Users\ksasao\Desktop\NEUTRINO``` などのように自分の環境にあわせて入力)し、```mml2neutrino.exe "任意のMML"``` で実行します。必ず```"``` (ダブルクォーテーション)で囲むようにしてください。
 
 ## 実行例
