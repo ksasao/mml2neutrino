@@ -32,5 +32,28 @@ namespace MML2NEUTRINO
         /// Support Japanese Hiragana/Katakana letters
         /// </summary>
         public string Lyric { get; set; }
+
+        public override bool Equals(object obj)
+        {
+            return obj is Note note &&
+                   Step == note.Step &&
+                   Alter == note.Alter &&
+                   Octave == note.Octave &&
+                   HasDot == note.HasDot &&
+                   Length == note.Length &&
+                   Lyric == note.Lyric;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashCode = -1788234954;
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Step);
+            hashCode = hashCode * -1521134295 + Alter.GetHashCode();
+            hashCode = hashCode * -1521134295 + Octave.GetHashCode();
+            hashCode = hashCode * -1521134295 + HasDot.GetHashCode();
+            hashCode = hashCode * -1521134295 + Length.GetHashCode();
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Lyric);
+            return hashCode;
+        }
     }
 }

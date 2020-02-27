@@ -12,5 +12,16 @@ namespace MML2NEUTRINO
         /// Tempo
         /// </summary>
         public int Value { get; set; }
+
+        public override bool Equals(object obj)
+        {
+            return obj is Tempo tempo &&
+                   Value == tempo.Value;
+        }
+
+        public override int GetHashCode()
+        {
+            return -1937169414 + Value.GetHashCode();
+        }
     }
 }
