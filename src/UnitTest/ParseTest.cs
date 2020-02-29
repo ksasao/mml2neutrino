@@ -93,6 +93,7 @@ namespace UnitTest
                 new Note{ Octave = 4, Step = "G", Length = 4, Alter = 0, HasDot = false,  Lyric = "お", MML="Gお" },
                 new Note{ Octave = 4, Step = "A", Length = 4, Alter = 0, HasDot = false,  Lyric = "か", MML="Aか" },
                 new Note{ Octave = 4, Step = "B", Length = 4, Alter = 0, HasDot = false,  Lyric = "き", MML="Bき" },
+                new Octave { Value = 5, MML = ">"},
                 new Note{ Octave = 5, Step = "C", Length = 4, Alter = 0, HasDot = false,  Lyric = "く", MML="Cく" }
             };
             IElement[] parsed = parser.Parse(mml);
@@ -106,7 +107,11 @@ namespace UnitTest
             IElement[] elements = new IElement[]
             {
                 new Note{ Octave = 4, Step = "C", Length = 4, Alter = 0, HasDot = false,  Lyric = "あ", MML="Cあ" },
+                new Octave { Value = 5, MML = ">"},
+                new Octave { Value = 6, MML = ">"},
                 new Note{ Octave = 6, Step = "D", Length = 4, Alter = 0, HasDot = false,  Lyric = "い", MML="Dい" },
+                new Octave { Value = 5, MML = "<"},
+                new Octave { Value = 4, MML = "<"},
                 new Note{ Octave = 4, Step = "E", Length = 4, Alter = 0, HasDot = false,  Lyric = "う", MML="Eう" }
             };
             IElement[] parsed = parser.Parse(mml);
@@ -120,6 +125,7 @@ namespace UnitTest
             IElement[] elements = new IElement[]
             {
                 new Note{ Octave = 4, Step = "C", Length = 4, Alter = 0, HasDot = false,  Lyric = "あ", MML="Cあ"  },
+                new Length { Value = 8, MML = "L8"},
                 new Note{ Octave = 4, Step = "D", Length = 8, Alter = 0, HasDot = false,  Lyric = "い", MML="Dい"  },
                 new Note{ Octave = 4, Step = "E", Length = 4, Alter = 0, HasDot = false,  Lyric = "う", MML="E4う"  }
             };
@@ -135,6 +141,7 @@ namespace UnitTest
             {
                 new Rest{ Length = 4, HasDot = false, MML="R"},
                 new Rest{ Length = 1, HasDot = false, MML="R1"},
+                new Length { Value = 8, MML = "L8"},
                 new Rest{ Length = 8, HasDot = false, MML="R"}
             };
             IElement[] parsed = parser.Parse(mml);
@@ -147,7 +154,7 @@ namespace UnitTest
             MMLParser parser = new MMLParser();
             IElement[] elements = new IElement[]
             {
-                new Tempo{ Value = 150 },
+                new Tempo{ Value = 150, MML = "T150" },
                 new Note{ Octave = 4, Step = "C", Length = 4, Alter = 0, HasDot = false,  Lyric = "あ", MML="Cあ" }
             };
             IElement[] parsed = parser.Parse(mml);
@@ -185,6 +192,7 @@ namespace UnitTest
             MMLParser parser = new MMLParser();
             IElement[] elements = new IElement[]
             {
+                new Length{ Value = 6, MML="L6"},
                 new Note{ Octave = 4, Step = "C", Length = 6, Alter = 0, HasDot = false,  Lyric = "あ", MML="Cあ" },
                 new Note{ Octave = 4, Step = "C", Length = 6, Alter = 0, HasDot = false,  Lyric = "あ", MML="Cあ" },
                 new Note{ Octave = 4, Step = "C", Length = 6, Alter = 0, HasDot = false,  Lyric = "あ", MML="Cあ" },
@@ -193,6 +201,19 @@ namespace UnitTest
             IElement[] parsed = parser.Parse(mml);
             CollectionAssert.AreEqual(elements, parsed);
         }
+        [TestMethod]
+        public void LengthTest1()
+        {
+            string mml = "L4";
+            MMLParser parser = new MMLParser();
+            IElement[] elements = new IElement[]
+            {
+                new Length{ Value = 4, MML="L4"}
+            };
+            IElement[] parsed = parser.Parse(mml);
+            CollectionAssert.AreEqual(elements, parsed);
+        }
+
         //
         // Exception Test
         //

@@ -54,6 +54,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Octave.cs" />
+    <Compile Include="Length.cs" />
     <Compile Include="Tempo.cs" />
     <Compile Include="Rest.cs" />
   </ItemGroup>

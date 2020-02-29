@@ -37,6 +37,13 @@ namespace UnitTest
             var expected = ReadXml(methodName);
             Assert.AreEqual(expected, xElement.ToString());
         }
+        private void AssertException(string mml)
+        {
+            MMLParser parser = new MMLParser();
+            var parsed = parser.Parse(mml);
+            MusicXMLGenerator g = new MusicXMLGenerator();
+            g.GenerateFromElements(parsed);
+        }
         #endregion
 
         [TestMethod]
@@ -92,6 +99,23 @@ namespace UnitTest
         {
             string mml = "L2C.あR4";
             AssertMusicXmlAreEqual(mml, false);
+        }
+        //
+        // Exception Test
+        //
+        [TestMethod()]
+        [ExpectedException(typeof(FormatException))]
+        public void ExceptionRest1()
+        {
+            string mml = "L2RR4R";
+            AssertException(mml);
+        }
+        [TestMethod()]
+        [ExpectedException(typeof(FormatException))]
+        public void ExceptionNote1()
+        {
+            string mml = "L2CあC4あCあ";
+            AssertException(mml);
         }
     }
 }

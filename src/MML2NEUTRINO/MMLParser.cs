@@ -175,6 +175,11 @@ namespace MML2NEUTRINO
                     octave = Convert.ToInt32(mml.Substring(p + n, j));
                     n += j;
                     CheckOctave(mml, p + n);
+                    list.Add(new Octave
+                    {
+                        Value = octave,
+                        MML = mml.Substring(p, n)
+                    });
                 }
                 else
                 {
@@ -197,7 +202,15 @@ namespace MML2NEUTRINO
                 n++;
                 octave--;
             }
-            CheckOctave(mml, p + n);
+            if(n != 0)
+            {
+                CheckOctave(mml, p + n);
+                list.Add(new Octave
+                {
+                    Value = octave,
+                    MML = mml.Substring(p, n)
+                });
+            }
             return n;
         }
         private void CheckOctave(string mml, int pn)
@@ -220,6 +233,11 @@ namespace MML2NEUTRINO
                 {
                     length = Convert.ToInt32(mml.Substring(p + n, j));
                     n += j;
+                    list.Add(new Length
+                    {
+                        Value = length,
+                        MML = mml.Substring(p, n)
+                    });
                 }
                 else
                 {

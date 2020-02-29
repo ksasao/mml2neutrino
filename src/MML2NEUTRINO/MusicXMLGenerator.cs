@@ -53,8 +53,9 @@ namespace MML2NEUTRINO
             measure.Add(Attribute(maxDuration/4, 0, 4, 4, "G", 2));
             measure.SetAttributeValue("number", m++);
 
-            foreach (var e in elements)
+            for(int i=0; i< elements.Length; i++)
             {
+                var e = elements[i];
                 Type t = e.GetType();
                 if(t == typeof(Note))
                 {
@@ -68,14 +69,15 @@ namespace MML2NEUTRINO
                         mDuration = 0;
                     }else if (mDuration > maxDuration)
                     {
-                        throw new FormatException("小節をまたぐ音符が指定されています。");
+                        string mml = CreateMML(elements, i);
+                        throw new FormatException(mml + " 小節をまたぐ音符が指定されています。");
                     }
                 }
                 else if(t == typeof(Rest))
                 {
                     var r = CreateRest((Rest)e);
                     measure.Add(r);
-                    if (mDuration >= maxDuration)
+                    if (mDuration == maxDuration)
                     {
                         part.Add(measure);
                         measure = new XElement("measure");
@@ -84,7 +86,8 @@ namespace MML2NEUTRINO
                     }
                     else if (mDuration > maxDuration)
                     {
-                        throw new FormatException("小節をまたぐ休符が指定されています。");
+                        string mml = CreateMML(elements, i);
+                        throw new FormatException(mml + " 小節をまたぐ休符が指定されています。");
                     }
                 }
                 else if(t == typeof(Tempo))
@@ -103,6 +106,18 @@ namespace MML2NEUTRINO
             }
             return xml;
         }
+
+        private string CreateMML(IElement[] elements, int i)
+        {
+            StringBuilder sb = new StringBuilder();
+            for (int j = 0; j < elements.Length && j <= i; j++)
+            {
+                sb.Append(elements[j].MML);
+            }
+            string mml = sb.ToString();
+            return mml;
+        }
+
         public XElement CreateTempo(int tempo)
         {
             XElement sound = new XElement("sound");
