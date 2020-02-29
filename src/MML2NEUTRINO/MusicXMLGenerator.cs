@@ -139,49 +139,17 @@ namespace MML2NEUTRINO
             mDuration += duration;
 
             var dot = n.HasDot ? new XElement("dot") : null;
-            switch (n.Alter)
-            {
-                case 0:
-                    note = new XElement("note",
-                        new XElement("pitch",
-                            new XElement("step", n.Step),
-                            new XElement("octave", n.Octave)
-                            ),
-                        new XElement("duration", duration),
-                        new XElement("type", t[duration]),
-                        dot,
-                        lyricElement);
-                    break;
-                case -1:
-                    note = new XElement("note",
-                        new XElement("pitch",
-                            new XElement("step", n.Step),
-                            new XElement("alter", -1),
-                            new XElement("octave", n.Octave)
-                            ),
-                        new XElement("duration", duration),
-                        new XElement("type", t[duration]),
-                        new XElement("accidental", "flat"),
-                        dot,
-                        lyricElement);
-                    break;
-                case 1:
-                    note = new XElement("note",
-                        new XElement("pitch",
-                            new XElement("step", n.Step),
-                            new XElement("alter", 1),
-                            new XElement("octave", n.Octave)
-                            ),
-                        new XElement("duration", duration),
-                        new XElement("type", t[duration]),
-                        new XElement("accidental", "sharp"),
-                        dot,
-                        lyricElement);
-                    break;
-                default:
-                    break;
-            }
-
+            var alter = n.Alter == -1 ? new XElement("alter", -1) : n.Alter == 1 ? new XElement("alter", 1) : null;
+            note = new XElement("note",
+                new XElement("pitch",
+                    new XElement("step", n.Step),
+                    alter,
+                    new XElement("octave", n.Octave)
+                    ),
+                new XElement("duration", duration),
+                new XElement("type", t[duration]),
+                dot,
+                lyricElement);
             return note;
         }
         private XElement CreateRest(Rest r)
