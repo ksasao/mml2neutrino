@@ -10,6 +10,7 @@ namespace MML2NEUTRINO
 {
     class Program
     {
+        const string cachePath = "./cache";
         static void Main(string[] args)
         {
             string outputMusicXML = "output.musicxml";
@@ -18,14 +19,15 @@ namespace MML2NEUTRINO
             if (args.Length > 0)
             {
                 string mml = args[0];
-                
+
                 MMLParser parser = new MMLParser();
 
                 IElement[] elements = null;
                 try
                 {
                     elements = parser.Parse(mml);
-                }catch(Exception ex)
+                }
+                catch (Exception ex)
                 {
                     Console.WriteLine(ex.Message);
                     return;
@@ -35,20 +37,17 @@ namespace MML2NEUTRINO
 
                 string filename = Path.GetFullPath(outputMusicXML);
                 xml.Save(filename);
+                string hash = GetHash(filename);
 
-                // Run NEUTRINO
-                string neutrino = @"input.bat";
-                ProcessStartInfo pi = new ProcessStartInfo();
-                pi.FileName = neutrino;
-                pi.Arguments = filename;
-                pi.CreateNoWindow = true;
-                pi.UseShellExecute = false;
-                pi.RedirectStandardOutput = true;
-
-                Process p = Process.Start(pi);
-                while (!p.StandardOutput.EndOfStream)
+                if (!IsCached(hash))
                 {
-                    Console.WriteLine(p.StandardOutput.ReadLine());
+                    RunNeutrino(filename);
+                    CreateCache(hash, outputWav);
+                }
+                else
+                {
+                    Console.WriteLine("Using cached file.");
+                    outputWav = Path.Combine(cachePath, hash + ".wav");
                 }
 
                 // Play wave file
@@ -58,7 +57,44 @@ namespace MML2NEUTRINO
             }
         }
 
+        private static void RunNeutrino(string filename)
+        {
+            string neutrino = @"input.bat";
+            ProcessStartInfo pi = new ProcessStartInfo();
+            pi.FileName = neutrino;
+            pi.Arguments = filename;
+            pi.CreateNoWindow = true;
+            pi.UseShellExecute = false;
+            pi.RedirectStandardOutput = true;
 
+            Process p = Process.Start(pi);
+            while (!p.StandardOutput.EndOfStream)
+            {
+                Console.WriteLine(p.StandardOutput.ReadLine());
+            }
+        }
+
+        static private bool IsCached(string hash)
+        {
+            string file = Path.Combine(cachePath, hash + ".wav");
+            return File.Exists(file);
+        }
+        static private void CreateCache(string hash, string src)
+        {
+            Directory.CreateDirectory(cachePath);
+            string dest = Path.Combine(cachePath, hash + ".wav");
+            File.Copy(src, dest);
+        }
+        static private string GetHash(string filename)
+        {
+            using (FileStream fs = new FileStream(filename, FileMode.Open, FileAccess.Read))
+            {
+                System.Security.Cryptography.SHA1 sha1 = System.Security.Cryptography.SHA1.Create();
+                byte[] bs = sha1.ComputeHash(fs);
+                sha1.Clear();
+                return BitConverter.ToString(bs).ToLower().Replace("-", "");
+            }
+        }
     }
 
 }
