@@ -12,10 +12,10 @@ namespace MML2NEUTRINO
     {
         // 16分音符と8分音符3連符をサポート → 全音符 = 48
         string[] t = new string[] { "-",
-            "16th","16th","16th","eighth", "-","eighth","-","-","-","-",
-            "-","quater","-","-","-","quater","-","-","-","-",
+            "16th","16th","16th","eighth", "-","eighth","-","-","eighth","-",
+            "-","quater","-","-","-","quater","-","quater","-","-",
             "-","-","-","half", "-","-","-","-","-","-",
-            "-","-","-","-", "-","-","-","-","-","-",
+            "-","-","-","-", "-","half","-","-","-","-",
             "-","-","-","-", "-","-","-","whole" };
         int[] durations = new int[] { 0,
             48,24,16,12, 0,0,0,6, 0,0,0,4, 0,0,0,3,
@@ -138,6 +138,7 @@ namespace MML2NEUTRINO
             }
             mDuration += duration;
 
+            var dot = n.HasDot ? new XElement("dot") : null;
             switch (n.Alter)
             {
                 case 0:
@@ -148,6 +149,7 @@ namespace MML2NEUTRINO
                             ),
                         new XElement("duration", duration),
                         new XElement("type", t[duration]),
+                        dot,
                         lyricElement);
                     break;
                 case -1:
@@ -160,6 +162,7 @@ namespace MML2NEUTRINO
                         new XElement("duration", duration),
                         new XElement("type", t[duration]),
                         new XElement("accidental", "flat"),
+                        dot,
                         lyricElement);
                     break;
                 case 1:
@@ -172,6 +175,7 @@ namespace MML2NEUTRINO
                         new XElement("duration", duration),
                         new XElement("type", t[duration]),
                         new XElement("accidental", "sharp"),
+                        dot,
                         lyricElement);
                     break;
                 default:

@@ -44,8 +44,17 @@ namespace MML2NEUTRINO
                     return;
                 }
 
-                string filename = Path.GetFullPath(outputMusicXML);
-                xml.Save(filename);
+                string filename = "";
+                try
+                {
+                    filename = Path.GetFullPath(outputMusicXML);
+                    xml.Save(filename);
+                }
+                catch (IOException ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    return;
+                }
                 string hash = GetHash(filename);
 
                 if (!IsCached(hash))

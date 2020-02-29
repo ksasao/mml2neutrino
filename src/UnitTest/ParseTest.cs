@@ -164,6 +164,21 @@ namespace UnitTest
             CollectionAssert.AreEqual(p1,p2);
         }
 
+        [TestMethod]
+        public void DotTest1()
+        {
+            string mml = "C2.うC4.あC8.い";
+            MMLParser parser = new MMLParser();
+            IElement[] elements = new IElement[]
+            {
+                new Note{ Octave = 4, Step = "C", Length = 2, Alter = 0, HasDot = true,  Lyric = "う" },
+                new Note{ Octave = 4, Step = "C", Length = 4, Alter = 0, HasDot = true,  Lyric = "あ" },
+                new Note{ Octave = 4, Step = "C", Length = 8, Alter = 0, HasDot = true,  Lyric = "い" }
+            };
+            IElement[] parsed = parser.Parse(mml);
+            CollectionAssert.AreEqual(elements, parsed);
+        }
+
         //
         // Exception Test
         //
