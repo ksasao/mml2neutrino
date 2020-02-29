@@ -33,7 +33,16 @@ namespace MML2NEUTRINO
                     return;
                 }
                 var xmlGen = new MusicXMLGenerator();
-                var xml = xmlGen.GenerateFromElements(elements);
+                XElement xml = null;
+                try
+                {
+                    xml = xmlGen.GenerateFromElements(elements);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    return;
+                }
 
                 string filename = Path.GetFullPath(outputMusicXML);
                 xml.Save(filename);

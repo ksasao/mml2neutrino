@@ -10,9 +10,19 @@ namespace MML2NEUTRINO
 {
     public class MusicXMLGenerator
     {
-        string[] t = new string[] { "-", "eighth", "quater", "-", "half", "-", "-", "-", "whole" };
-        int[] durations = new int[] { 0, 8, 4, 3, 2, 0, 0, 0, 1 }; // L1=8.L2=4,L3=3,L4=2,L5=0,L6=0,L7=0,L8=1 
+        // 16分音符と8分音符3連符をサポート → 全音符 = 48
+        string[] t = new string[] { "-",
+            "16th","16th","16th","eighth", "-","eighth","-","-","-","-",
+            "-","quater","-","-","-","quater","-","-","-","-",
+            "-","-","-","half", "-","-","-","-","-","-",
+            "-","-","-","-", "-","-","-","-","-","-",
+            "-","-","-","-", "-","-","-","whole" };
+        int[] durations = new int[] { 0,
+            48,24,16,12, 0,0,0,6, 0,0,0,4, 0,0,0,3,
+            0,0,0,0, 0,0,0,2, 0,0,0,0, 0,0,0,0,
+            0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,1 }; // L1=48.L2=24,L3=16,L4=12,L8=6,L12=4,L16=3.L24=2,L48=1 
         int mDuration = 0;
+        const int maxDuration = 48;
         XElement xml = null;
         XElement part = null;
 
@@ -40,7 +50,7 @@ namespace MML2NEUTRINO
 
             int m = 1;
             XElement measure = new XElement("measure");
-            measure.Add(Attribute(2, 0, 4, 4, "G", 2));
+            measure.Add(Attribute(maxDuration/4, 0, 4, 4, "G", 2));
             measure.SetAttributeValue("number", m++);
 
             foreach (var e in elements)
@@ -50,7 +60,7 @@ namespace MML2NEUTRINO
                 {
                     var n = CreateNote((Note)e);
                     measure.Add(n);
-                    if (mDuration >= 8)
+                    if (mDuration >= maxDuration)
                     {
                         part.Add(measure);
                         measure = new XElement("measure");
@@ -62,7 +72,7 @@ namespace MML2NEUTRINO
                 {
                     var r = CreateRest((Rest)e);
                     measure.Add(r);
-                    if (mDuration >= 8)
+                    if (mDuration >= maxDuration)
                     {
                         part.Add(measure);
                         measure = new XElement("measure");
@@ -76,10 +86,10 @@ namespace MML2NEUTRINO
             }
             if (mDuration > 0)
             {
-                int last = 8 - mDuration;
+                int last = maxDuration - mDuration;
                 for (int i = 0; i < last; i++)
                 {
-                    measure.Add(CreateRest(new Rest { Length = 8, HasDot = false }));
+                    measure.Add(CreateRest(new Rest { Length = 48, HasDot = false }));
                 }
                 part.Add(measure);
             }
@@ -100,7 +110,7 @@ namespace MML2NEUTRINO
         private XElement Attribute(int divisions, int fifths, int beats, int beatType, string sign, int line)
         {
             XElement attribute = new XElement("attributes",
-                new XElement("divisions", 2),
+                new XElement("divisions", divisions),
                 new XElement("key",
                     new XElement("fifths", fifths)),
                 new XElement("time",
