@@ -16,10 +16,16 @@ namespace UnitTest
         }
         private string ReadXml(string methodName)
         {
+            System.Diagnostics.StackFrame callerFrame = new System.Diagnostics.StackFrame(1);
+            System.Reflection.MethodBase callerMethod = callerFrame.GetMethod();
             return File.ReadAllText($"../../xml/{methodName}.xml");
         }
-        private void AssertMusicXmlAreEqual(string methodName, string mml, bool create)
+        private void AssertMusicXmlAreEqual(string mml, bool create)
         {
+            System.Diagnostics.StackFrame callerFrame = new System.Diagnostics.StackFrame(1);
+            System.Reflection.MethodBase callerMethod = callerFrame.GetMethod();
+            string methodName = callerMethod.Name;
+
             MMLParser parser = new MMLParser();
             IElement[] parsed = parser.Parse(mml);
             MusicXMLGenerator g = new MusicXMLGenerator();
@@ -31,32 +37,61 @@ namespace UnitTest
             var expected = ReadXml(methodName);
             Assert.AreEqual(expected, xElement.ToString());
         }
-        private void AssertMusicXmlAreEqual(string methodName, string mml)
-        {
-            AssertMusicXmlAreEqual(methodName, mml, false);
-        }
         #endregion
 
         [TestMethod]
         public void NoteTest0()
         {
-            string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
             string mml = "CあRRR";
-            AssertMusicXmlAreEqual(methodName, mml);
+            AssertMusicXmlAreEqual(mml, false);
         }
         [TestMethod]
         public void NoteTest1()
         {
-            string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
             string mml = "C4あRRR";
-            AssertMusicXmlAreEqual(methodName, mml);
+            AssertMusicXmlAreEqual(mml, false);
         }
         [TestMethod]
         public void NoteTest2()
         {
-            string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
             string mml = "C2.あR4C4.いC8.う";
-            AssertMusicXmlAreEqual(methodName, mml);
+            AssertMusicXmlAreEqual(mml, false);
+        }
+        [TestMethod]
+        public void EighthTripletTest()
+        {
+            string mml = "L12CあCあCあDいDいDいR2";
+            AssertMusicXmlAreEqual(mml, false);
+        }
+        [TestMethod]
+        public void QuaterTripletTest()
+        {
+            string mml = "L6CあCあCあDいDいDい";
+            AssertMusicXmlAreEqual(mml, false);
+        }
+        [TestMethod]
+        public void HalfTripletTest()
+        {
+            string mml = "L3CあCあCあDいDいDい";
+            AssertMusicXmlAreEqual(mml, false);
+        }
+        [TestMethod]
+        public void EighthDotTest()
+        {
+            string mml = "L8C.あR16R4R2";
+            AssertMusicXmlAreEqual(mml, false);
+        }
+        [TestMethod]
+        public void QuaterDotTest()
+        {
+            string mml = "L4C.あR8R2";
+            AssertMusicXmlAreEqual(mml, false);
+        }
+        [TestMethod]
+        public void HalfDotTest()
+        {
+            string mml = "L2C.あR4";
+            AssertMusicXmlAreEqual(mml, false);
         }
     }
 }

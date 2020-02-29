@@ -178,7 +178,21 @@ namespace UnitTest
             IElement[] parsed = parser.Parse(mml);
             CollectionAssert.AreEqual(elements, parsed);
         }
-
+        [TestMethod]
+        public void TripletTest1()
+        {
+            string mml = "L6CあCあCあR2";
+            MMLParser parser = new MMLParser();
+            IElement[] elements = new IElement[]
+            {
+                new Note{ Octave = 4, Step = "C", Length = 6, Alter = 0, HasDot = false,  Lyric = "あ" },
+                new Note{ Octave = 4, Step = "C", Length = 6, Alter = 0, HasDot = false,  Lyric = "あ" },
+                new Note{ Octave = 4, Step = "C", Length = 6, Alter = 0, HasDot = false,  Lyric = "あ" },
+                new Rest{ Length = 2}
+            };
+            IElement[] parsed = parser.Parse(mml);
+            CollectionAssert.AreEqual(elements, parsed);
+        }
         //
         // Exception Test
         //

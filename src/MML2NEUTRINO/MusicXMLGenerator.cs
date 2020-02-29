@@ -12,15 +12,15 @@ namespace MML2NEUTRINO
     {
         // 16分音符と8分音符3連符をサポート → 全音符 = 48
         string[] t = new string[] { "-",
-            "16th","16th","16th","eighth", "-","eighth","-","-","eighth","-",
-            "-","quater","-","-","-","quater","-","quater","-","-",
-            "-","-","-","half", "-","-","-","-","-","-",
-            "-","-","-","-", "-","half","-","-","-","-",
-            "-","-","-","-", "-","-","-","whole" };
+            "16th","16th","16th","eighth", "[5]","eighth","[7]","quater","eighth","[10]",
+            "[11]","quater","[13]","[14]","[15]","half","[17]","quater","[19]","[20]",
+            "[21]","[22]","[23]","half", "[25]","[26]","[27]","[28]","[29]","[30]",
+            "[31]","[32]","[33]","[34]", "[35]","half","[37]","[38]","[39]","[40]",
+            "[41]","[42]","[43]","[44]", "[45]","[46]","[47]","whole" };
         int[] durations = new int[] { 0,
-            48,24,16,12, 0,0,0,6, 0,0,0,4, 0,0,0,3,
+            48,24,16,12, 0,8,0,6, 0,0,0,4, 0,0,0,3,
             0,0,0,0, 0,0,0,2, 0,0,0,0, 0,0,0,0,
-            0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,1 }; // L1=48.L2=24,L3=16,L4=12,L8=6,L12=4,L16=3.L24=2,L48=1 
+            0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,1 }; // L1=48.L2=24,L3=16,L4=12,L6=8,L8=6,L12=4,L16=3.L24=2,L48=1 
         int mDuration = 0;
         const int maxDuration = 48;
         XElement xml = null;
@@ -131,6 +131,10 @@ namespace MML2NEUTRINO
             lyricElement.SetAttributeValue("number", 1);
 
             XElement note = null;
+            if(n.Length<0 || n.Length>= durations.Length || durations[n.Length] == 0)
+            {
+                throw new FormatException($"長さ {n.Length} は指定できません。");
+            }
             int duration = durations[n.Length];
             if (n.HasDot)
             {
