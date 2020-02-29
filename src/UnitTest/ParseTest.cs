@@ -153,6 +153,17 @@ namespace UnitTest
             IElement[] parsed = parser.Parse(mml);
             CollectionAssert.AreEqual(elements, parsed);
         }
+        [TestMethod]
+        public void RemoveSpaceTest1()
+        {
+            string mml1 = "T150CあDいEうFえ";
+            string mml2 = " T150Cあ \tDい　Eう\r\nFえ ";
+            MMLParser parser = new MMLParser();
+            var p1 = parser.Parse(mml1);
+            var p2 = parser.Parse(mml2);
+            CollectionAssert.AreEqual(p1,p2);
+        }
+
         //
         // Exception Test
         //

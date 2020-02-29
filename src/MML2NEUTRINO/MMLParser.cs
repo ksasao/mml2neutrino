@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace MML2NEUTRINO
@@ -30,7 +31,7 @@ namespace MML2NEUTRINO
         public IElement[] Parse(string mml)
         {
             InitializeParameter();
-            mml = mml.Replace(" ", "").ToUpper();
+            mml = Regex.Replace(mml, @"[\t\r\n\s]", "").ToUpper();
             int p = 0;
             while(p < mml.Length)
             {
