@@ -18,10 +18,16 @@ namespace MML2NEUTRINO
             return obj is Tempo tempo &&
                    Value == tempo.Value;
         }
-
+        /// <summary>
+        /// MML
+        /// </summary>
+        public string MML { get; set; }
         public override int GetHashCode()
         {
-            return -1937169414 + Value.GetHashCode();
+            int hashCode = -1937169414;
+            hashCode = Value.GetHashCode();
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(MML);
+            return hashCode;
         }
     }
 }

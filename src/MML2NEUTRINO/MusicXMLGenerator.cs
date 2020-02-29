@@ -60,12 +60,15 @@ namespace MML2NEUTRINO
                 {
                     var n = CreateNote((Note)e);
                     measure.Add(n);
-                    if (mDuration >= maxDuration)
+                    if (mDuration == maxDuration)
                     {
                         part.Add(measure);
                         measure = new XElement("measure");
                         measure.SetAttributeValue("number", m++);
                         mDuration = 0;
+                    }else if (mDuration > maxDuration)
+                    {
+                        throw new FormatException("小節をまたぐ音符が指定されています。");
                     }
                 }
                 else if(t == typeof(Rest))
@@ -79,7 +82,12 @@ namespace MML2NEUTRINO
                         measure.SetAttributeValue("number", m++);
                         mDuration = 0;
                     }
-                }else if(t == typeof(Tempo))
+                    else if (mDuration > maxDuration)
+                    {
+                        throw new FormatException("小節をまたぐ休符が指定されています。");
+                    }
+                }
+                else if(t == typeof(Tempo))
                 {
                     measure.Add(CreateTempo(((Tempo)e).Value));
                 }

@@ -104,7 +104,8 @@ namespace MML2NEUTRINO
                     Alter = alter,
                     Length = len,
                     HasDot = hasDot,
-                    Lyric = lyric});
+                    Lyric = lyric,
+                    MML = mml.Substring(p,n)});
             }
             return n;
         }
@@ -131,7 +132,8 @@ namespace MML2NEUTRINO
                 list.Add(new Rest
                 {
                     Length = len,
-                    HasDot = hasDot
+                    HasDot = hasDot,
+                    MML = mml.Substring(p, n)
                 });
             }
             return n;
@@ -152,7 +154,10 @@ namespace MML2NEUTRINO
                     {
                         throw new FormatException(mml.Substring(0, p + n) + $" テンポの範囲は{minTempo}～{maxTempo}です。");
                     }
-                    list.Add(new Tempo { Value = tempo });
+                    list.Add(new Tempo {
+                        Value = tempo,
+                        MML = mml.Substring(p, n)
+                    });
                 }
             }
             return n;
@@ -170,6 +175,10 @@ namespace MML2NEUTRINO
                     octave = Convert.ToInt32(mml.Substring(p + n, j));
                     n += j;
                     CheckOctave(mml, p + n);
+                }
+                else
+                {
+                    throw new FormatException(mml.Substring(0, p + n) + " Oの後には数字が必要です");
                 }
             }
             return n;
@@ -212,6 +221,11 @@ namespace MML2NEUTRINO
                     length = Convert.ToInt32(mml.Substring(p + n, j));
                     n += j;
                 }
+                else
+                {
+                    throw new FormatException(mml.Substring(0, p + n) + " Lの後には数字が必要です");
+                }
+
             }
             return n;
         }

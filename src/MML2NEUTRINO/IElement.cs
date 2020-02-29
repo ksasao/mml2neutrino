@@ -8,5 +8,6 @@ namespace MML2NEUTRINO
 {
     public interface IElement
     {
+        string MML { get; set; }
     }
 }

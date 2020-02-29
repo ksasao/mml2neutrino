@@ -16,12 +16,17 @@ namespace MML2NEUTRINO
         /// L2C -> Length = 2 / D16 -> Length = 16 / C4. -> Length = 4 (dot is ignored)
         /// </summary>
         public int Length { get; set; }
+        /// <summary>
+        /// MML
+        /// </summary>
+        public string MML { get; set; }
 
         public override bool Equals(object obj)
         {
             return obj is Rest rest &&
                    HasDot == rest.HasDot &&
-                   Length == rest.Length;
+                   Length == rest.Length &&
+                   MML == rest.MML;
         }
 
         public override int GetHashCode()
@@ -29,6 +34,7 @@ namespace MML2NEUTRINO
             var hashCode = 1560665283;
             hashCode = hashCode * -1521134295 + HasDot.GetHashCode();
             hashCode = hashCode * -1521134295 + Length.GetHashCode();
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(MML);
             return hashCode;
         }
     }

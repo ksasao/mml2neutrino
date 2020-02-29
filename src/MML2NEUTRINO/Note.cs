@@ -32,6 +32,10 @@ namespace MML2NEUTRINO
         /// Support Japanese Hiragana/Katakana letters
         /// </summary>
         public string Lyric { get; set; }
+        /// <summary>
+        /// MML
+        /// </summary>
+        public string MML { get; set; }
 
         public override bool Equals(object obj)
         {
@@ -41,7 +45,8 @@ namespace MML2NEUTRINO
                    Octave == note.Octave &&
                    HasDot == note.HasDot &&
                    Length == note.Length &&
-                   Lyric == note.Lyric;
+                   Lyric == note.Lyric &&
+                   MML == note.MML;
         }
 
         public override int GetHashCode()
@@ -53,6 +58,7 @@ namespace MML2NEUTRINO
             hashCode = hashCode * -1521134295 + HasDot.GetHashCode();
             hashCode = hashCode * -1521134295 + Length.GetHashCode();
             hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Lyric);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(MML);
             return hashCode;
         }
     }
