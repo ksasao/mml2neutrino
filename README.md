@@ -3,7 +3,7 @@ MML (Music Macro Language) for NEUTRINO
 
 AIきりたんをMMLで歌わせるやつです。
 ## アプリ
-- [v0.3](https://github.com/ksasao/mml2neutrino/files/4251015/mml2neutrino_v0.3.zip) 十六分音符および八分音符三連符までの長さに対応。一度生成した歌をキャッシュする機構を追加。エラーチェックの強化。([リリースノート](https://github.com/ksasao/mml2neutrino/releases/tag/v0.3))
+- [v0.3](https://github.com/ksasao/mml2neutrino/releases/download/v0.3/mml2neutrino_v0.3.zip) 十六分音符および八分音符三連符までの長さに対応。一度生成した歌をキャッシュする機構を追加。エラーチェックの強化。([リリースノート](https://github.com/ksasao/mml2neutrino/releases/tag/v0.3))
 - [v0.2](https://github.com/ksasao/mml2neutrino/files/4251015/mml2neutrino_v0.2.zip) 細かな修正と機能追加。文法エラーメッセージの改善。([リリースノート](https://github.com/ksasao/mml2neutrino/releases/tag/v0.2))
 - [v0.1](https://github.com/ksasao/mml2neutrino/files/4243814/v0.1.zip) とにかく試したい方向け。α版です。
 
