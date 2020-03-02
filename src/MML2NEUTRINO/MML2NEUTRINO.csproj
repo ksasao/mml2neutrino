@@ -46,6 +46,7 @@
     <Compile Include="IElement.cs" />
     <Compile Include="MMLParser.cs" />
     <Compile Include="MusicXMLGenerator.cs" />
+    <Compile Include="NeutrinoController.cs" />
     <Compile Include="Note.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
