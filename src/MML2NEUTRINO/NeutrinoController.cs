@@ -11,11 +11,34 @@ namespace MML2NEUTRINO
 {
     public class NeutrinoController
     {
+        private int processors;
+
+        /// <summary>
+        /// Cache path
+        /// </summary>
         public string CachePath { get; set; } = "./cache";
+        /// <summary>
+        /// Number of threads for running Neutrino. Default value is (logical processors - 1)
+        /// </summary>
+        public int NumberOfThreads { get { return processors; } set { SetProcessors(value); } }
         public NeutrinoController()
         {
-
+            Initialize();
         }
+        private void Initialize()
+        {
+            int c = Environment.ProcessorCount;
+            processors = c > 1 ? c-1 : c;
+        }
+        private void SetProcessors(int value)
+        {
+            int maxProcessors = Environment.ProcessorCount;
+            if(value<0 || value > maxProcessors)
+            {
+                throw new FormatException($"プロセッサ数には 0～{maxProcessors}を指定してください。");
+            }
+        }
+
         public IElement[] Parse(string mml)
         {
             MMLParser parser = new MMLParser();
@@ -54,7 +77,20 @@ namespace MML2NEUTRINO
             string hash = GetHash(musicXmlFile);
             if (!IsCached(hash))
             {
-                RunBatch(musicXmlFile);
+                string baseName = Path.GetFileNameWithoutExtension(musicXmlFile);
+                string outputPath = Path.GetDirectoryName(musicXmlFile);
+                int numberOfThreads = NumberOfThreads;
+                string modelDirectory = "KIRITAN";
+                float pitchShift = 1.0f;
+                float formantShift = 1.0f;
+
+                Run(@"bin\musicXMLtoLabel.exe",
+                    $"{musicXmlFile} score\\label\\full\\{baseName}.lab score\\label\\mono\\{baseName}.lab");
+                Run(@"bin\NEUTRINO.exe",
+                    $"score\\label\\full\\{baseName}.lab score\\label\\timing\\{baseName}.lab output\\{baseName}.f0 output\\{baseName}.mgc output\\{baseName}.bap model\\{modelDirectory}\\ -n {numberOfThreads} -t");
+                Run(@"bin\WORLD.exe",
+                    $"output\\{baseName}.f0 output\\{baseName}.mgc output\\{baseName}.bap -f {pitchShift} -m {formantShift} -o {outputPath}\\{baseName}.wav -n {numberOfThreads} -t");
+
                 CreateCache(hash, outputWav);
             }
             else
@@ -64,12 +100,11 @@ namespace MML2NEUTRINO
             return Path.Combine(CachePath, hash + ".wav");
         }
 
-        private void RunBatch(string musicXmlFile)
+        private void Run(string filename, string args)
         {
-            string neutrino = @"input.bat";
             ProcessStartInfo pi = new ProcessStartInfo();
-            pi.FileName = neutrino;
-            pi.Arguments = musicXmlFile;
+            pi.FileName = filename;
+            pi.Arguments = args;
             pi.CreateNoWindow = true;
             pi.UseShellExecute = false;
             pi.RedirectStandardOutput = true;
