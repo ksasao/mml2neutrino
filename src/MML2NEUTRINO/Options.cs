@@ -16,9 +16,9 @@ namespace MML2NEUTRINO
         [Option('m', "model", Required = false, HelpText = "モデル名(省略時は KIRITAN)")]
         public string Model { get; set; } = "KIRITAN";
 
-        [Option('p', "pitchshift", Required = false, HelpText = "ピッチシフト(WORLD)")]
-        public float PitchShift { get; set; } = 1.0f;
-        [Option('f', "formantshift", Required = false, HelpText = "フォルマントシフト(WORLD)")]
+        [Option('p', "pitchshift", Required = false, HelpText = "ピッチを変更します。+1.0 で半音高くなります。省略時は 0.0 です。")]
+        public float PitchShift { get; set; } = 0f;
+        [Option('f', "formantshift", Required = false, HelpText = "フォルマントを変更します。大きくする(1.05など)と声が子供っぽくなります。省略時は 1.0 です。")]
         public float FormantShift { get; set; } = 1.0f;
 
         [Option('t', "threads", Required = false, HelpText = "使用するスレッド数(省略時は最大スレッド数-1)")]

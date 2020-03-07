@@ -24,7 +24,7 @@ namespace MML2NEUTRINO
                 {
 
                     nc.FormantShift = opt.FormantShift;
-                    nc.PitchShift = opt.PitchShift;
+                    nc.PitchShift = (float)Math.Pow(2,opt.PitchShift/12f);
                     nc.Model = opt.Model;
                     if (opt.NumberOfThread != -1)
                     {
@@ -42,12 +42,12 @@ namespace MML2NEUTRINO
                     {
                         mml = File.ReadAllText(opt.InputFileName);
                     }
-                    if(mml == "")
+                    if(string.IsNullOrEmpty(mml))
                     {
                         Console.WriteLine("ヘルプを表示するには --help を入力してください");
                         return;
                     }
-
+                        
                     IElement[] elements = null;
                     try
                     {

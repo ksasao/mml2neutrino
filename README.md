@@ -27,14 +27,30 @@ AIきりたんをMMLで歌わせるやつです。
 |T|テンポを四分音符換算で指定します。|80|T120 (♩=120 に設定)|
 
 ## 使用方法
-1. ```input.bat``` ```mml2neutrino.exe``` のファイルを NEUTRINO の Run.bat と同じフォルダにコピーしてください。
+1. ```mml2neutrino.exe``` を NEUTRINO の Run.bat と同じフォルダにコピーしてください。
 2. コマンドプロンプトで、NEUTRINOと同じフォルダに移動(```cd c:\Users\ksasao\Desktop\NEUTRINO``` などのように自分の環境にあわせて入力)し、```mml2neutrino.exe "任意のMML"``` で実行します。必ず```"``` (ダブルクォーテーション)で囲むようにしてください。
 
-## 実行例
+### オプション
+|引数||意味|
+|---|---|---|
+|-i|--input|MMLが記載されたテキストファイル (UTF-8)|
+|-o|--output|出力ファイル名 (*.wav)|
+|-m|--model|モデル名 (省略時は KIRITAN)|
+|-p|--pitchshift|ピッチを変更します。+1.0 で半音高くなります。省略時は 0.0 です。|
+|-f|--formantshift|フォルマントを変更します。大きくすると声が高くなります。省略時は 1.0です。|
+|-t|--threads|使用するスレッド数(省略時は最大スレッド数-1)|
+|-s|--silent|自動的にファイルを再生しません|
+
+### 実行例
 ```
 mml2neutrino.exe "O4L4R4CあEさAだG2よ"
 ```
 で、「朝だよー」と歌います。またその音声ファイル(output.wav)が生成されます。
+
+```
+mml2neutrino.exe -i "sample.txt" -o "sample.wav"
+```
+で、```sample.txt``` に記述された MML を利用して歌います。UTF-8形式のみサポートしています。また、歌唱ファイルとして、"sample.wav" を出力します。
 
 ## 調声
 くろ州 歌声合成備忘録 [AIシンガー調声アイデア　NEUTRINOで使えるテクニック](https://km4osm.com/neutrino-idea/) に記載されているテクニックは概ね利用可能です。

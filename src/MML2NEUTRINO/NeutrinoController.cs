@@ -94,7 +94,7 @@ namespace MML2NEUTRINO
                 byte[] bs = sha1.ComputeHash(fs);
                 sha1.Clear();
                 string h = BitConverter.ToString(bs).ToLower().Replace("-", "");
-                return $"{h}_{Model}_{PitchShift}_{FormantShift}";
+                return $"{h}_{Model}_{PitchShift:0.0000}_{FormantShift}";
             }
         }
 
@@ -115,7 +115,7 @@ namespace MML2NEUTRINO
                 Run(@"bin\NEUTRINO.exe",
                     $"score\\label\\full\\{baseName}.lab score\\label\\timing\\{baseName}.lab output\\{baseName}.f0 output\\{baseName}.mgc output\\{baseName}.bap model\\{modelDirectory}\\ -n {numberOfThreads} -t");
                 Run(@"bin\WORLD.exe",
-                    $"output\\{baseName}.f0 output\\{baseName}.mgc output\\{baseName}.bap -f {pitchShift} -m {formantShift} -o {outputFileName} -n {numberOfThreads} -t");
+                    $"output\\{baseName}.f0 output\\{baseName}.mgc output\\{baseName}.bap -f {pitchShift:0.0000} -m {formantShift} -o {outputFileName} -n {numberOfThreads} -t");
 
                 CreateCache(hash, outputFileName);
             }
