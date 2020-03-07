@@ -22,6 +22,10 @@ namespace MML2NEUTRINO
         /// </summary>
         public int NumberOfThreads { get { return threads; } set { SetProcessors(value); } }
         /// <summary>
+        /// Key Shift
+        /// </summary>
+        public int KeyShift { get; set; }
+        /// <summary>
         /// Formant Shift
         /// </summary>
         public float FormantShift { get; set; }
@@ -64,6 +68,45 @@ namespace MML2NEUTRINO
             MMLParser parser = new MMLParser();
             return parser.Parse(mml);
         }
+
+        public IElement[] ChangeKey(int keyshift, IElement[] elements)
+        {
+            List<IElement> output = new List<IElement>();
+            foreach(var e in elements)
+            {
+                var t = e.GetType();
+                if(t == typeof(Note))
+                {
+                    int n = ConvertToNoteNumber(e as Note);
+                    Note note = ConvertToKey(e as Note, n + keyshift);
+                    output.Add(note);
+                }
+                else
+                {
+                    output.Add(e);
+                }
+            }
+            return output.ToArray();
+        }
+
+        private int ConvertToNoteNumber(Note n)
+        {
+            Dictionary<string, int> keys = new Dictionary<string, int> {
+                {"C",0 },{"D",2 },{"E",4 },{"F",5 },{"G",7 },{"A" ,9 },{"B" ,11 } };
+            return n.Octave * 12 + keys[n.Step] + n.Alter;
+        }
+        private Note ConvertToKey(Note n, int noteNumber)
+        {
+            string[] steps = { "C", "C", "D", "D", "E", "F", "F", "G", "G", "A", "A", "B" };
+            int[] alters = { 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0 };
+            int octave = noteNumber / 12;
+            int p = noteNumber % 12;
+            n.Octave = octave;
+            n.Step = steps[p];
+            n.Alter = alters[p];
+            return n;
+        }
+
         public XElement ConvertToMusicXML(IElement[] elements)
         {
             var xmlGen = new MusicXMLGenerator();

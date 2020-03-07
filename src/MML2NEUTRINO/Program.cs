@@ -59,6 +59,11 @@ namespace MML2NEUTRINO
                         return;
                     }
 
+                    if(opt.KeyShift != 0)
+                    {
+                        elements = nc.ChangeKey(opt.KeyShift, elements);
+                    }
+
                     XElement xml = null;
                     try
                     {
