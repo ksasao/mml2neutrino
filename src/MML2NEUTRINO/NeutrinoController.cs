@@ -11,7 +11,7 @@ namespace MML2NEUTRINO
 {
     public class NeutrinoController
     {
-        private int processors;
+        private int threads;
 
         /// <summary>
         /// Cache path
@@ -20,7 +20,27 @@ namespace MML2NEUTRINO
         /// <summary>
         /// Number of threads for running Neutrino. Default value is (logical processors - 1)
         /// </summary>
-        public int NumberOfThreads { get { return processors; } set { SetProcessors(value); } }
+        public int NumberOfThreads { get { return threads; } set { SetProcessors(value); } }
+        /// <summary>
+        /// Formant Shift
+        /// </summary>
+        public float FormantShift { get; set; }
+        /// <summary>
+        /// Pitch Shift
+        /// </summary>
+        public float PitchShift { get; set; }
+        /// <summary>
+        /// Model directory
+        /// </summary>
+        public string Model { get; set; }
+        /// <summary>
+        /// Input MML file (UTF-8)
+        /// </summary>
+        public string InputFileName { get; set; } = "";
+        /// <summary>
+        /// Output .wav file name
+        /// </summary>
+        public string OutputFileName { get; set; } = "output.wav";
         public NeutrinoController()
         {
             Initialize();
@@ -28,14 +48,14 @@ namespace MML2NEUTRINO
         private void Initialize()
         {
             int c = Environment.ProcessorCount;
-            processors = c > 1 ? c-1 : c;
+            threads = c > 1 ? c-1 : c;
         }
         private void SetProcessors(int value)
         {
             int maxProcessors = Environment.ProcessorCount;
             if(value<0 || value > maxProcessors)
             {
-                throw new FormatException($"プロセッサ数には 0～{maxProcessors}を指定してください。");
+                throw new FormatException($"スレッド数には 0～{maxProcessors}を指定してください。");
             }
         }
 
@@ -61,6 +81,11 @@ namespace MML2NEUTRINO
             string dest = Path.Combine(CachePath, hash + ".wav");
             File.Copy(src, dest);
         }
+        private void CopyFromCache(string dest, string hash)
+        {
+            string src = Path.Combine(CachePath, hash + ".wav");
+            File.Copy(src, dest, true);
+        }
         public string GetHash(string filename)
         {
             using (FileStream fs = new FileStream(filename, FileMode.Open, FileAccess.Read))
@@ -68,34 +93,36 @@ namespace MML2NEUTRINO
                 System.Security.Cryptography.SHA1 sha1 = System.Security.Cryptography.SHA1.Create();
                 byte[] bs = sha1.ComputeHash(fs);
                 sha1.Clear();
-                return BitConverter.ToString(bs).ToLower().Replace("-", "");
+                string h = BitConverter.ToString(bs).ToLower().Replace("-", "");
+                return $"{h}_{Model}_{PitchShift}_{FormantShift}";
             }
         }
+
         public string RunNeutrino(string musicXmlFile)
         {
-            string outputWav = Path.Combine(Path.GetDirectoryName(musicXmlFile), Path.GetFileNameWithoutExtension(musicXmlFile) + ".wav");
+            return RunNeutrino(musicXmlFile, OutputFileName, PitchShift, FormantShift, Model, NumberOfThreads);
+        }
+        public string RunNeutrino(string musicXmlFile, string outputFileName, float pitchShift, float formantShift, string modelDirectory, int numberOfThreads)
+        {
+            outputFileName = Path.GetFullPath(outputFileName);
             string hash = GetHash(musicXmlFile);
             if (!IsCached(hash))
             {
                 string baseName = Path.GetFileNameWithoutExtension(musicXmlFile);
-                string outputPath = Path.GetDirectoryName(musicXmlFile);
-                int numberOfThreads = NumberOfThreads;
-                string modelDirectory = "KIRITAN";
-                float pitchShift = 1.0f;
-                float formantShift = 1.0f;
 
                 Run(@"bin\musicXMLtoLabel.exe",
                     $"{musicXmlFile} score\\label\\full\\{baseName}.lab score\\label\\mono\\{baseName}.lab");
                 Run(@"bin\NEUTRINO.exe",
                     $"score\\label\\full\\{baseName}.lab score\\label\\timing\\{baseName}.lab output\\{baseName}.f0 output\\{baseName}.mgc output\\{baseName}.bap model\\{modelDirectory}\\ -n {numberOfThreads} -t");
                 Run(@"bin\WORLD.exe",
-                    $"output\\{baseName}.f0 output\\{baseName}.mgc output\\{baseName}.bap -f {pitchShift} -m {formantShift} -o {outputPath}\\{baseName}.wav -n {numberOfThreads} -t");
+                    $"output\\{baseName}.f0 output\\{baseName}.mgc output\\{baseName}.bap -f {pitchShift} -m {formantShift} -o {outputFileName} -n {numberOfThreads} -t");
 
-                CreateCache(hash, outputWav);
+                CreateCache(hash, outputFileName);
             }
             else
             {
                 Console.WriteLine("Using cached file.");
+                CopyFromCache(outputFileName, hash);
             }
             return Path.Combine(CachePath, hash + ".wav");
         }
