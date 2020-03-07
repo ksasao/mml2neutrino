@@ -16,7 +16,7 @@ namespace MML2NEUTRINO
         [Option('m', "model", Required = false, HelpText = "モデル名(省略時は KIRITAN)")]
         public string Model { get; set; } = "KIRITAN";
 
-        [Option('k', "keyshift", Required = false, HelpText = "MML のキーを変更します。+1.0 で半音高くなります。省略時は 0.0 です。")]
+        [Option('k', "keyshift", Required = false, HelpText = "MML のキーを変更します。1 で半音高くなります。省略時は 0 です。")]
         public int KeyShift { get; set; } = 0;
 
         [Option('p', "pitchshift", Required = false, HelpText = "音声出力時のピッチを変更します。+1.0 で半音高くなります。省略時は 0.0 です。")]
