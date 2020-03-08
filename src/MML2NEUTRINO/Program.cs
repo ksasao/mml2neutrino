@@ -51,7 +51,7 @@ namespace MML2NEUTRINO
                     IElement[] elements = null;
                     try
                     {
-                        elements = nc.Parse(mml);
+                        elements = nc.Parse(mml, opt.Reverse);
                     }
                     catch (Exception ex)
                     {

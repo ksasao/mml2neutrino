@@ -24,10 +24,12 @@ namespace MML2NEUTRINO
         [Option('f', "formantshift", Required = false, HelpText = "フォルマントを変更します。大きくする(1.05など)と声が子供っぽくなります。省略時は 1.0 です。")]
         public float FormantShift { get; set; } = 1.0f;
 
-        [Option('t', "threads", Required = false, HelpText = "使用するスレッド数(省略時は最大スレッド数-1)")]
+        [Option('t', "threads", Required = false, HelpText = "使用するスレッド数(省略時は最大スレッド数-1)。")]
         public int NumberOfThread { get; set; } = -1;
-        [Option('s', "silent", Required = false, HelpText = "自動的にファイルを再生しません")]
+        [Option('s', "silent", Required = false, HelpText = "自動的にファイルを再生しません。")]
         public bool Silent { get; set; } = false;
+        [Option('r', "reverse", Required = false, HelpText = ">, < の役割を逆にします。")]
+        public bool Reverse { get; set; } = false;
 
         [Value(1, MetaName = "remaining")]
         public IEnumerable<string> Remaining { get; set; }

@@ -118,6 +118,25 @@ namespace UnitTest
             CollectionAssert.AreEqual(elements, parsed);
         }
         [TestMethod]
+        public void OctaveReverseTest1()
+        {
+            string mml = "Cあ>>Dい<<Eう";
+            MMLParser parser = new MMLParser();
+            IElement[] elements = new IElement[]
+            {
+                new Note{ Octave = 4, Step = "C", Length = 4, Alter = 0, HasDot = false,  Lyric = "あ", MML="Cあ" },
+                new Octave { Value = 3, MML = ">"},
+                new Octave { Value = 2, MML = ">"},
+                new Note{ Octave = 2, Step = "D", Length = 4, Alter = 0, HasDot = false,  Lyric = "い", MML="Dい" },
+                new Octave { Value = 3, MML = "<"},
+                new Octave { Value = 4, MML = "<"},
+                new Note{ Octave = 4, Step = "E", Length = 4, Alter = 0, HasDot = false,  Lyric = "う", MML="Eう" }
+            };
+            IElement[] parsed = parser.Parse(mml,true);
+            CollectionAssert.AreEqual(elements, parsed);
+        }
+
+        [TestMethod]
         public void NoteTest3()
         {
             string mml = "CあL8DいE4う";

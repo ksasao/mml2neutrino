@@ -20,6 +20,8 @@ namespace MML2NEUTRINO
         int length = 0;
         int octave = 0;
 
+        bool reverse = false;
+
         public MMLParser() { 
         }
         private void InitializeParameter()
@@ -28,8 +30,14 @@ namespace MML2NEUTRINO
             length = 4;
             octave = 4;
         }
+
         public IElement[] Parse(string mml)
         {
+            return Parse(mml, false);
+        }
+        public IElement[] Parse(string mml, bool octaveReverse)
+        {
+            reverse = octaveReverse;
             InitializeParameter();
             mml = Regex.Replace(mml, @"[\t\r\n\s]", "").ToUpper();
             int p = 0;
@@ -195,12 +203,12 @@ namespace MML2NEUTRINO
             if (c == ">")
             {
                 n++;
-                octave++;
+                octave = octave + (reverse ? -1 : 1);
             }
             else if (c == "<")
             {
                 n++;
-                octave--;
+                octave = octave - (reverse ? -1 : 1);
             }
             if(n != 0)
             {

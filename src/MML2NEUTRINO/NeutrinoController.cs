@@ -63,10 +63,10 @@ namespace MML2NEUTRINO
             }
         }
 
-        public IElement[] Parse(string mml)
+        public IElement[] Parse(string mml,bool reverse)
         {
             MMLParser parser = new MMLParser();
-            return parser.Parse(mml);
+            return parser.Parse(mml,reverse);
         }
 
         public IElement[] ChangeKey(int keyshift, IElement[] elements)
