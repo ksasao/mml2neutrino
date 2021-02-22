@@ -70,7 +70,7 @@ namespace MML2NEUTRINO
                     }else if (mDuration > maxDuration)
                     {
                         string mml = CreateMML(elements, i);
-                        throw new FormatException(mml + " 小節をまたぐ音符が指定されています。");
+                        throw new FormatException($"{mml} 小節をまたぐ音符が指定されています。(over: {mDuration - maxDuration}/{maxDuration})");
                     }
                 }
                 else if(t == typeof(Rest))
@@ -87,7 +87,7 @@ namespace MML2NEUTRINO
                     else if (mDuration > maxDuration)
                     {
                         string mml = CreateMML(elements, i);
-                        throw new FormatException(mml + " 小節をまたぐ休符が指定されています。");
+                        throw new FormatException($"{mml} 小節をまたぐ休符が指定されています。(over: {mDuration - maxDuration}/{maxDuration})");
                     }
                 }
                 else if(t == typeof(Tempo))
