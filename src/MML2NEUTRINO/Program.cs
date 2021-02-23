@@ -30,7 +30,6 @@ namespace MML2NEUTRINO
                     {
                         nc.NumberOfThreads = opt.NumberOfThread;
                     }
-                    nc.OutputFileName = opt.OutputFileName;
 
                     // set MML
                     string mml = "";
@@ -41,7 +40,12 @@ namespace MML2NEUTRINO
                     if (opt.InputFileName != null)
                     {
                         mml = File.ReadAllText(opt.InputFileName);
+                        if (string.IsNullOrEmpty(opt.OutputFileName))
+                        {
+                            opt.OutputFileName = Path.ChangeExtension(opt.InputFileName, ".wav");
+                        }
                     }
+                    nc.OutputFileName = string.IsNullOrEmpty(opt.OutputFileName) ? "output.wav" : opt.OutputFileName;
                     if(string.IsNullOrEmpty(mml))
                     {
                         Console.WriteLine("ヘルプを表示するには --help を入力してください");
