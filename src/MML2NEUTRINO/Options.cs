@@ -12,7 +12,7 @@ namespace MML2NEUTRINO
         [Option('i', "input", Required = false, HelpText = "MMLが記載されたテキストファイル(UTF-8)")]
         public string InputFileName { get; set; }
         [Option('o', "output", Required = false, HelpText = "出力ファイル名(*.wav)")]
-        public string OutputFileName { get; set; } = "output.wav";
+        public string OutputFileName { get; set; }
         [Option('m', "model", Required = false, HelpText = "モデル名(省略時は KIRITAN)")]
         public string Model { get; set; } = "KIRITAN";
 
